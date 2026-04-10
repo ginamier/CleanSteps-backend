@@ -6,9 +6,18 @@ const {
 } = require("../utils/errors.js");
 
 const createOrder = (req, res, next) => {
-  const { clientName, clientPhone, items, status, totalAmount, amountPaid } =
-    req.body;
-  const owner = req.user._id;
+  const {
+    clientName,
+    clientPhone,
+    items,
+    status,
+    totalAmount,
+    amountPaid,
+    secondPayment,
+    deliveryDate,
+    deliveryDateSuede,
+  } = req.body;
+  const owner = req.user?._id || req.body.owner;
 
   Order.create({
     clientName,
@@ -17,6 +26,9 @@ const createOrder = (req, res, next) => {
     status,
     totalAmount,
     amountPaid,
+    secondPayment,
+    deliveryDate,
+    deliveryDateSuede,
     owner,
   })
     .then((order) => res.status(201).send(order))
