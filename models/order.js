@@ -19,9 +19,9 @@ const orderSchema = new mongoose.Schema({
 
   items: [
     {
+      idCalzado: String,
       descripcion: String,
       precio: Number,
-      idCalzado: String,
     },
   ],
   status: {

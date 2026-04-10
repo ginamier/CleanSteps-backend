@@ -10,14 +10,19 @@ router.post('/',celebrate({
         clientPhone: Joi.string().required(),
         items: Joi.array().items(
             Joi.object().keys({
-                description: Joi.string(),
-                price: Joi.number(),
-                serviceId: Joi.string(),
+                idCalzado: Joi.string().required(),
+                descripcion: Joi.string().required(),
+                precio: Joi.number().required(),
+                
             })  
         ).required(),
-        status: Joi.string().valid('Recibido', 'Entregado').default('Recibido'),
+        status: Joi.string().valid('recibido', 'entregado').default('recibido'),
         totalAmount: Joi.number().required(),
-        amountPaid: Joi.number().default(0),
+        amountPaid: Joi.number(),
+        secondPayment: Joi.number(),
+        deliveryDate: Joi.string().required(),
+        deliveryDateSuede: Joi.string().allow(''),
+        owner: Joi.string().hex().length(24),
     }),
 }), createOrder);
 
