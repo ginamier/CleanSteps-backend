@@ -21,17 +21,28 @@ const orderSchema = new mongoose.Schema({
     items: [{
         description: String, 
         price: Number,
-        serviceId: String,
+        idCalzado: String,
     }],
     status: {
         type: String,
-        enum: ['Recibido', 'Entregado'],
-        default: 'Recibido'
+        enum: ['recibido', 'entregado'],
+        default: 'recibido'
     },
 
     totalAmount: {type: Number, required: true},
-    amountPaid: {type: Number, default: 0}
+    amountPaid: {type: Number, default: 0},
 
+    secondPayment: { 
+        type: Number, 
+        default: 0 
+    },
+    deliveryDate: { 
+        type: String,
+        required: true 
+    },
+    deliveryDateSuede: { 
+        type: String 
+    }
 
 });
 
