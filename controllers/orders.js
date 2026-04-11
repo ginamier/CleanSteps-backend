@@ -69,8 +69,34 @@ const deleteOrder = (req, res, next) => {
     });
 };
 
+const updateOrderStatus = (req, res, next) => {
+  const { orderId } = req.params;
+  const { status, secondPayment } = req.body;
+
+  Order.findByIdAndUpdate(
+    orderId,
+    { status, secondPayment },
+    { new: true, runValidators: true }
+  )
+    .then((order) => {
+      if (!order) {
+        throw new Error('No se encontró la orden');
+      }
+      res.send(order);
+    })
+    .catch((err)=>{
+      if (err.name === "CastError") {
+        next(new BadRequestError("ID de orden inválido"));
+      } else if (err.name === "ValidationError") {
+        next(new BadRequestError("Datos de actualización inválidos"));
+      } else {
+        next(err);
+      }
+    });
+};
 module.exports = {
   getOrders,
   createOrder,
   deleteOrder,
+  updateOrderStatus
 };
