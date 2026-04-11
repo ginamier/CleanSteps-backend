@@ -31,12 +31,26 @@ mongoose
 
 app.use(helmet());
 
+const allowedOrigins = [
+  'https://cleansteps.mooo.com',
+  'http://cleansteps.mooo.com',
+  'https://api.cleansteps.mooo.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
+];
+
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
   optionSuccessStatus: 200
 };
-app.use(cors(corsOptions));
 
+app.use(cors(corsOptions));
 
 
 
