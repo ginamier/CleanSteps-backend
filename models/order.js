@@ -19,9 +19,9 @@ const orderSchema = new mongoose.Schema({
 
   items: [
     {
-      idCalzado: String,
-      descripcion: String,
-      precio: Number,
+      shoeId: String,
+      description: String,
+      price: Number,
     },
   ],
   status: {
@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
   },
 
   totalAmount: { type: Number, required: true },
-  amountPaid: { type: Number, default: 0 },
+  firstPayment: { type: Number, default: 0 },
 
   secondPayment: {
     type: Number,

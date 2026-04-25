@@ -18,15 +18,17 @@ router.post(
       items: Joi.array()
         .items(
           Joi.object().keys({
-            idCalzado: Joi.string().required(),
-            descripcion: Joi.string().required(),
-            precio: Joi.number().required(),
+            shoeId: Joi.alternatives()
+              .try(Joi.string(), Joi.number())
+              .required(),
+            description: Joi.string().required(),
+            price: Joi.number().required(),
           }),
         )
         .required(),
       status: Joi.string().valid("recibido", "entregado").default("recibido"),
       totalAmount: Joi.number().required(),
-      amountPaid: Joi.number(),
+      firstPayment: Joi.number(),
       secondPayment: Joi.number(),
       deliveryDate: Joi.string().required(),
       deliveryDateSuede: Joi.string().allow(""),
@@ -54,11 +56,10 @@ router.patch(
     }),
     body: Joi.object().keys({
       status: Joi.string().valid("recibido", "entregado").required(),
-      secondPayment: Joi.number().required(), 
+      secondPayment: Joi.number().required(),
     }),
   }),
   updateOrderStatus,
 );
-
 
 module.exports = router;

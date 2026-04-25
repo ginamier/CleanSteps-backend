@@ -1,9 +1,5 @@
 const Order = require("../models/order.js");
-const {
-  BadRequestError,
-  NotFoundError,
-  ForbiddenError,
-} = require("../utils/errors.js");
+const { BadRequestError, NotFoundError } = require("../utils/errors.js");
 
 const createOrder = (req, res, next) => {
   const {
@@ -12,7 +8,7 @@ const createOrder = (req, res, next) => {
     items,
     status,
     totalAmount,
-    amountPaid,
+    firstPayment,
     secondPayment,
     deliveryDate,
     deliveryDateSuede,
@@ -25,7 +21,7 @@ const createOrder = (req, res, next) => {
     items,
     status,
     totalAmount,
-    amountPaid,
+    firstPayment,
     secondPayment,
     deliveryDate,
     deliveryDateSuede,
@@ -76,15 +72,15 @@ const updateOrderStatus = (req, res, next) => {
   Order.findByIdAndUpdate(
     orderId,
     { status, secondPayment },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((order) => {
       if (!order) {
-        throw new Error('No se encontró la orden');
+        throw new Error("No se encontró la orden");
       }
       res.send(order);
     })
-    .catch((err)=>{
+    .catch((err) => {
       if (err.name === "CastError") {
         next(new BadRequestError("ID de orden inválido"));
       } else if (err.name === "ValidationError") {
@@ -98,5 +94,5 @@ module.exports = {
   getOrders,
   createOrder,
   deleteOrder,
-  updateOrderStatus
+  updateOrderStatus,
 };

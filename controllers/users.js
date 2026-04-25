@@ -14,7 +14,8 @@ const login = (req, res, next) => {
 
   User.findUserByCredentials(email, password)
     .then((user) => {
-        const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
+      const secretKey =
+        NODE_ENV === "production" ? JWT_SECRET : "super-strong-secret";
       const token = jwt.sign({ _id: user._id }, secretKey, {
         expiresIn: "7d",
       });
@@ -26,29 +27,31 @@ const login = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  console.log("Llegó petición de registro");
   const { name, email, password } = req.body;
 
-
-bcrypt.hash(password, 10)
-  .then((hash)=>User.create({
-     name,
-      email,
-       password:hash,
-   }))
-   .then((user)=>{
-       const userResponse = user.toObject();
+  bcrypt
+    .hash(password, 10)
+    .then((hash) =>
+      User.create({
+        name,
+        email,
+        password: hash,
+      }),
+    )
+    .then((user) => {
+      const userResponse = user.toObject();
       delete userResponse.password;
-       res.status(201).send(userResponse);
-   })
-   .catch((err)=>{
-      if (err.name==='ValidationError'){
-           next(new BadRequestError('Datos de registro inválidos'));
-  
-     } else if(err.code=== 11000){
-         next (new ConflictError('Este correo ya está registrado'))
-      } else { next(err)};
-   });
+      res.status(201).send(userResponse);
+    })
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Datos de registro inválidos"));
+      } else if (err.code === 11000) {
+        next(new ConflictError("Este correo ya está registrado"));
+      } else {
+        next(err);
+      }
+    });
 };
 
 const getCurrentUser = (req, res, next) => {
@@ -69,26 +72,26 @@ const updateUser = (req, res, next) => {
   User.findByIdAndUpdate(
     userId,
     { name, email },
-    { 
-      returnDocument: 'after', 
-      runValidators: true 
-    }
+    {
+      returnDocument: "after",
+      runValidators: true,
+    },
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Usuario no encontrado');
+        throw new NotFoundError("Usuario no encontrado");
       }
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Datos de actualización inválidos'));
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Datos de actualización inválidos"));
       } else if (err.code === 11000) {
-        next(new ConflictError('Este correo ya está en uso por otro usuario'));
+        next(new ConflictError("Este correo ya está en uso por otro usuario"));
       } else {
         next(err);
       }
     });
 };
 
-module.exports = { createUser, getCurrentUser, login, updateUser};
+module.exports = { createUser, getCurrentUser, login, updateUser };
