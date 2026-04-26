@@ -1,16 +1,16 @@
-const router = require("express").Router();
-const { celebrate, Joi } = require("celebrate");
+const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const {
   getOrders,
   createOrder,
   deleteOrder,
   updateOrderStatus,
-} = require("../controllers/orders");
+} = require('../controllers/orders');
 
-router.get("/", getOrders);
+router.get('/', getOrders);
 
 router.post(
-  "/",
+  '/',
   celebrate({
     body: Joi.object().keys({
       clientName: Joi.string().required(),
@@ -26,12 +26,12 @@ router.post(
           }),
         )
         .required(),
-      status: Joi.string().valid("recibido", "entregado").default("recibido"),
+      status: Joi.string().valid('recibido', 'entregado').default('recibido'),
       totalAmount: Joi.number().required(),
       firstPayment: Joi.number(),
       secondPayment: Joi.number(),
       deliveryDate: Joi.string().required(),
-      deliveryDateSuede: Joi.string().allow(""),
+      deliveryDateSuede: Joi.string().allow(''),
       owner: Joi.string().hex().length(24),
     }),
   }),
@@ -39,7 +39,7 @@ router.post(
 );
 
 router.delete(
-  "/:orderId",
+  '/:orderId',
   celebrate({
     params: Joi.object().keys({
       orderId: Joi.string().length(24).hex().required(),
@@ -49,13 +49,13 @@ router.delete(
 );
 
 router.patch(
-  "/:orderId",
+  '/:orderId',
   celebrate({
     params: Joi.object().keys({
       orderId: Joi.string().length(24).hex().required(),
     }),
     body: Joi.object().keys({
-      status: Joi.string().valid("recibido", "entregado").required(),
+      status: Joi.string().valid('recibido', 'entregado').required(),
       secondPayment: Joi.number().required(),
     }),
   }),

@@ -1,5 +1,5 @@
-const Order = require("../models/order.js");
-const { BadRequestError, NotFoundError } = require("../utils/errors.js");
+const Order = require('../models/order');
+const { BadRequestError, NotFoundError } = require('../utils/errors');
 
 const createOrder = (req, res, next) => {
   const {
@@ -13,7 +13,7 @@ const createOrder = (req, res, next) => {
     deliveryDate,
     deliveryDateSuede,
   } = req.body;
-  const owner = req.user?._id || req.body.owner;
+  const owner = (req.user && req.user._id) || req.body.owner;
 
   Order.create({
     clientName,
@@ -29,8 +29,8 @@ const createOrder = (req, res, next) => {
   })
     .then((order) => res.status(201).send(order))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        next(new BadRequestError("Datos de la orden inválidos"));
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Datos de la orden inválidos'));
       } else {
         next(err);
       }
@@ -47,18 +47,16 @@ const deleteOrder = (req, res, next) => {
   const { orderId } = req.params;
 
   Order.findById(orderId)
-    .select("+owner")
+    .select('+owner')
     .then((order) => {
       if (!order) {
-        return next(new NotFoundError("Orden no encontrada"));
+        return next(new NotFoundError('Orden no encontrada'));
       }
-      return Order.findByIdAndDelete(orderId).then(() =>
-        res.send({ message: "Orden eliminada correctamente" }),
-      );
+      return Order.findByIdAndDelete(orderId).then(() => res.send({ message: 'Orden eliminada correctamente' }));
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        next(new BadRequestError("ID de orden inválido"));
+      if (err.name === 'CastError') {
+        next(new BadRequestError('ID de orden inválido'));
       } else {
         next(err);
       }
@@ -76,15 +74,15 @@ const updateOrderStatus = (req, res, next) => {
   )
     .then((order) => {
       if (!order) {
-        throw new Error("No se encontró la orden");
+        throw new Error('No se encontró la orden');
       }
       res.send(order);
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        next(new BadRequestError("ID de orden inválido"));
-      } else if (err.name === "ValidationError") {
-        next(new BadRequestError("Datos de actualización inválidos"));
+      if (err.name === 'CastError') {
+        next(new BadRequestError('ID de orden inválido'));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequestError('Datos de actualización inválidos'));
       } else {
         next(err);
       }

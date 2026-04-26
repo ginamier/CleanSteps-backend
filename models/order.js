@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
     required: true,
   },
 
@@ -26,8 +26,8 @@ const orderSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    enum: ["recibido", "entregado"],
-    default: "recibido",
+    enum: ['recibido', 'entregado'],
+    default: 'recibido',
   },
 
   totalAmount: { type: Number, required: true },
@@ -46,4 +46,4 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("order", orderSchema);
+module.exports = mongoose.model('order', orderSchema);
